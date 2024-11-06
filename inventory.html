@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Entry - Smart Inventory Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Header and Navigation -->
+    <header class="bg-blue-600 text-white">
+        <div class="container mx-auto flex justify-between items-center py-4">
+            <h1 class="text-2xl font-bold">Smart Inventory Management</h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="index.html" class="hover:underline">Home</a></li>
+                    <li><a href="about.html" class="hover:underline">About Us</a></li>
+                    <li><a href="services.html" class="hover:underline">Services</a></li>
+                    <li><a href="inventory.html" class="hover:underline">Inventory Entry</a></li>
+                    <li><a href="cart.html" class="hover:underline">Cart</a></li>
+                    <li><a href="contact.html" class="hover:underline">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Inventory Entry Section -->
+    <section class="container mx-auto my-16 px-6 md:px-0">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg mx-auto">
+            <h3 class="text-2xl font-semibold text-center mb-6">Add Inventory Items</h3>
+            <form id="inventoryForm" class="space-y-4">
+                <div id="itemContainer">
+                    <!-- Placeholder for dynamic item entries -->
+                </div>
+                <button type="button" onclick="addItemEntry()" class="w-full bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600">Add Another Item</button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 mt-4">Save Items to Cart</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        let itemIndex = 0;
+
+        // Function to add a new inventory item entry
+        function addItemEntry() {
+            const itemContainer = document.getElementById('itemContainer');
+
+            const itemEntry = document.createElement('div');
+            itemEntry.classList.add('p-4', 'border', 'border-gray-300', 'rounded-lg', 'mb-4');
+            itemEntry.innerHTML = `
+                <h4 class="text-lg font-semibold mb-2">Item ${itemIndex + 1}</h4>
+                <label class="block text-gray-700">Product Name:</label>
+                <input type="text" name="productName" required class="w-full p-2 border border-gray-300 rounded-md mb-2" placeholder="Enter product name">
+
+                <label class="block text-gray-700">Category:</label>
+                <input type="text" name="category" required class="w-full p-2 border border-gray-300 rounded-md mb-2" placeholder="Enter category">
+
+                <label class="block text-gray-700">Quantity:</label>
+                <input type="number" name="quantity" required class="w-full p-2 border border-gray-300 rounded-md mb-2" placeholder="Enter quantity">
+
+                <label class="block text-gray-700">Unit Price:</label>
+                <input type="number" name="unitPrice" required step="0.01" class="w-full p-2 border border-gray-300 rounded-md mb-2" placeholder="Enter unit price">
+            `;
+            itemContainer.appendChild(itemEntry);
+            itemIndex++;
+        }
+
+        // Add initial item entry
+        addItemEntry();
+
+        // Form submission handler to save items to localStorage
+        document.getElementById('inventoryForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Collect all items from the form
+            const items = [];
+            const itemEntries = document.querySelectorAll('#itemContainer > div');
+
+            itemEntries.forEach(entry => {
+                const productName = entry.querySelector('input[name="productName"]').value;
+                const category = entry.querySelector('input[name="category"]').value;
+                const quantity = entry.querySelector('input[name="quantity"]').value;
+                const unitPrice = entry.querySelector('input[name="unitPrice"]').value;
+
+                items.push({ productName, category, quantity, unitPrice });
+            });
+
+            // Save items to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(items));
+
+            // Redirect to Cart page
+            window.location.href = 'cart.html';
+        });
+    </script>
+
+</body>
+</html>
